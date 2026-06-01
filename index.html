@@ -461,7 +461,7 @@ function makeLion(x,z,rot) {
     var a=(i/16)*Math.PI*2;
     var sz = 0.76 + (1.0-Math.cos(a))*0.19; // bigger at bottom/sides, smaller at forehead
     addTo(g,new THREE.SphereGeometry(0.148,8,6),mat.lionMane,
-      [Math.sin(a)*0.38, 0.95+Math.cos(a)*0.38, -0.12],
+      [Math.sin(a)*0.42, 0.95+Math.cos(a)*0.40, 0.06],
       [0,0,0],[sz,sz,0.58]);
   }
   addTo(g,new THREE.SphereGeometry(0.3,16,12),mat.lionGold,[0,0.95,0],[0,0,0],[1.02,0.98,1.04]);
