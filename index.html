@@ -106,12 +106,24 @@ html, body { width:100%; height:100%; margin:0; overflow:hidden; background:#c9d
 .th-body { font-size:12px; color:#3a4a56; line-height:2; font-weight:500; }
 .th-body b { color:#1a2730; }
 
+/* music toggle */
+#music-btn {
+  position:fixed; top:16px; right:18px; z-index:5;
+  background:rgba(242,238,224,.68); border:1px solid rgba(42,57,69,.18);
+  border-radius:8px; padding:6px 11px; font-size:16px; line-height:1;
+  cursor:pointer; backdrop-filter:blur(8px);
+  box-shadow:0 4px 12px rgba(39,44,47,.12);
+  transition:background .15s; color:#243240;
+}
+#music-btn:hover { background:rgba(242,238,224,.92); }
+
 @media (max-width:720px) { #caption{font-size:11px} #hud{left:10px;right:10px;bottom:10px;justify-content:center} .hint{display:none} #panel{width:100vw} }
 </style>
 </head>
 <body>
 <div id="world"></div>
 <div id="caption"><strong>Portfolio</strong><br>Juan Gomez Vara</div>
+<button id="music-btn" title="Toggle music">&#x1F50A;</button>
 <div id="hud">
   <span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span>
   <span class="hint">move</span>
@@ -892,6 +904,36 @@ window.addEventListener("resize", function() {
 
 camera.position.set(0, 5.1, -12);
 updateCamera();
+
+// Background music — starts on first interaction (browser autoplay policy)
+var bgMusic = new Audio('./music.mp3');
+bgMusic.loop = true;
+bgMusic.volume = 0.38;
+var musicStarted = false;
+
+var musicBtn = document.getElementById("music-btn");
+
+function startMusic() {
+  if (!musicStarted) {
+    musicStarted = true;
+    bgMusic.play().catch(function(){});
+  }
+}
+// Start on first touch/click/key anywhere
+window.addEventListener("pointerdown", startMusic, { once: true });
+window.addEventListener("keydown",     startMusic, { once: true });
+
+musicBtn.addEventListener("click", function(e) {
+  e.stopPropagation();
+  startMusic();
+  if (bgMusic.paused) {
+    bgMusic.play().catch(function(){});
+    musicBtn.innerHTML = "&#x1F50A;";
+  } else {
+    bgMusic.pause();
+    musicBtn.innerHTML = "&#x1F507;";
+  }
+});
 
 // Panda welcome hint — appears after 1.2 s, auto-hides after 5.5 s or on first interaction
 (function() {
