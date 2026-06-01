@@ -456,15 +456,6 @@ function makeLion(x,z,rot) {
   rot=rot||0;
   var g=new THREE.Group(); g.position.set(x,0.72,z); g.rotation.y=rot; scene.add(g);
   addTo(g,new THREE.SphereGeometry(0.38,16,12),mat.lionGold,[0,0.42,0],[0.04,0,0],[0.98,1.12,0.88]);
-  // mane — thick neck collar first, then outer puff ring
-  addTo(g,new THREE.SphereGeometry(0.33,12,9),mat.lionMane,[0,0.80,0.03],[0,0,0],[1.22,0.58,1.12]);
-  for (var i=0;i<14;i++) {
-    var a=(i/14)*Math.PI*2;
-    var puff = 0.85 + Math.abs(Math.sin(a))*0.35; // bigger on sides, smaller at top
-    addTo(g,new THREE.SphereGeometry(0.15,8,6),mat.lionMane,
-      [Math.sin(a)*0.42, 0.81+Math.cos(a)*0.14, Math.cos(a)*0.32],
-      [0,0,0],[puff,0.92,1]);
-  }
   addTo(g,new THREE.SphereGeometry(0.3,16,12),mat.lionGold,[0,0.95,0],[0,0,0],[1.02,0.98,1.04]);
   addTo(g,new THREE.SphereGeometry(0.145,12,8),mat.lionGold,[0,0.88,-0.25],[0,0,0],[1.08,0.82,0.72]);
   addTo(g,new THREE.SphereGeometry(0.048,8,6),mat.dark,[0,0.91,-0.34],[0,0,0],[1.5,0.75,1]);
@@ -473,7 +464,7 @@ function makeLion(x,z,rot) {
   addTo(g,new THREE.SphereGeometry(0.082,8,6),mat.lionGold,[-0.25,1.2,0.04],[0,0,0],[1,0.82,0.78]);
   addTo(g,new THREE.SphereGeometry(0.082,8,6),mat.lionGold,[0.25,1.2,0.04],[0,0,0],[1,0.82,0.78]);
   addTo(g,new THREE.CylinderGeometry(0.042,0.065,0.72,8),mat.lionGold,[0.42,0.22,0.38],[0.28,-0.55,0.82],[1,1,1]);
-  addTo(g,new THREE.SphereGeometry(0.12,8,6),mat.lionMane,[0.6,0.12,0.58],[0,0,0],[1,1,1]);
+  addTo(g,new THREE.SphereGeometry(0.12,8,6),mat.lionGold,[0.6,0.12,0.58],[0,0,0],[1,1,1]);
   addTo(g,new THREE.SphereGeometry(0.08,8,6),mat.lionGold,[-0.2,0.02,-0.3],[0,0,0],[1.4,0.4,1.9]);
   addTo(g,new THREE.SphereGeometry(0.08,8,6),mat.lionGold,[0.2,0.02,-0.3],[0,0,0],[1.4,0.4,1.9]);
   g.userData.baseY=g.position.y; registerCollider(x,z,0.55,0.55); return g;
@@ -585,18 +576,20 @@ function makeSignTexture(main, sub) {
   // main text (section name)
   ctx.textAlign = "center"; ctx.textBaseline = "middle";
   ctx.font = "bold 74px 'Trebuchet MS', Impact, Arial, sans-serif";
-  ctx.fillStyle = "rgba(38,14,0,.82)";
-  ctx.fillText(main.toUpperCase(), W/2+3, H*0.40+3);
-  var tg = ctx.createLinearGradient(0, H*0.22, 0, H*0.54);
-  tg.addColorStop(0,"#fff0a0"); tg.addColorStop(1,"#e0a020");
-  ctx.fillStyle = tg;
+  // bright top-left highlight for emboss look
+  ctx.fillStyle = "rgba(255,215,120,.55)";
+  ctx.fillText(main.toUpperCase(), W/2-1.5, H*0.40-1.5);
+  // very dark carved-wood colour — maximum contrast
+  ctx.fillStyle = "#0f0400";
   ctx.fillText(main.toUpperCase(), W/2, H*0.40);
 
   // sub text (tagline)
   ctx.font = "600 32px 'Trebuchet MS', Arial, sans-serif";
-  ctx.fillStyle = "rgba(38,14,0,.72)";
-  ctx.fillText(sub, W/2+2, H*0.76+2);
-  ctx.fillStyle = "#e8c84a";
+  // highlight
+  ctx.fillStyle = "rgba(255,210,110,.45)";
+  ctx.fillText(sub, W/2-1, H*0.76-1);
+  // dark fill
+  ctx.fillStyle = "#180800";
   ctx.fillText(sub, W/2, H*0.76);
 
   var tex = new THREE.CanvasTexture(cv);
@@ -680,7 +673,7 @@ for (var ci = 0; ci < 18; ci++) {
 
 /* ── input ── */
 var keys = new Set();
-var orbit = 0, pitch = 0.58, dragging = false, lastX = 0, lastY = 0;
+var orbit = Math.PI, pitch = 0.58, dragging = false, lastX = 0, lastY = 0;
 var currentNPC = null, panelOpen = false;
 
 window.addEventListener("keydown", function(e) {
@@ -861,7 +854,7 @@ window.addEventListener("resize", function() {
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 });
 
-camera.position.set(0, 5.1, 12);
+camera.position.set(0, 5.1, -12);
 updateCamera();
 animate();
 </script>
