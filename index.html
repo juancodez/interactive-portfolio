@@ -818,12 +818,7 @@ function updateUI(t) {
   }
 
   currentNPC = near;
-  if (near && !panelOpen) {
-    hintEl.textContent = "[E] Enter " + near.name + " house";
-    hintEl.classList.add("visible");
-  } else {
-    hintEl.classList.remove("visible");
-  }
+  hintEl.classList.remove("visible"); // E key still works — no banner shown
 
   // house-door labels removed — section names live on the NPC sign posts only
 
