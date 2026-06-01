@@ -775,8 +775,8 @@ function updatePlayer(dt, t) {
     var len = Math.sqrt(inputX*inputX+inputZ*inputZ);
     inputX /= len; inputZ /= len;
     var ca = Math.cos(orbit), sa = Math.sin(orbit);
-    var dx = -ca * inputX + sa * inputZ;
-    var dz =  sa * inputX + ca * inputZ;
+    var dx =  ca * inputX + sa * inputZ;
+    var dz = -sa * inputX + ca * inputZ;
     var spd = run ? 5.2 : 3.55;
     player.position.x += dx * dt * spd;
     player.position.z += dz * dt * spd;
