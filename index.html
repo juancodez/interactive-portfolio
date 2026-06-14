@@ -26,7 +26,7 @@ html, body { width:100%; height:100%; margin:0; overflow:hidden; background:#c9d
 .npc-ui { position:fixed; pointer-events:none; z-index:6; transform:translate(-50%,-100%); display:flex; flex-direction:column; align-items:center; gap:4px; transition:opacity .25s; }
 .speech-bubble { animation:bub-bob 2.4s ease-in-out infinite; display:flex; flex-direction:column; align-items:center; }
 .bubble-text { background:rgba(255,255,255,.97); border:1px solid rgba(42,57,69,.1); border-radius:10px; padding:5px 12px; font-size:11px; font-weight:700; color:#1a2730; white-space:nowrap; box-shadow:0 2px 12px rgba(0,0,0,.1); position:relative; }
-.bubble-text::after { content:''; position:absolute; bottom:-6px; left:50%; transform:translateX(-50%); border-left:6px solid transparent; border-right:6px solid transparent; border-top:6px solid rgba(255,255,255,.97); }
+.bubble-text::after { content:none; }
 @keyframes bub-bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
 .npc-name { background:rgba(242,238,224,.9); border:1px solid rgba(42,57,69,.18); border-radius:5px; padding:3px 10px; font-size:11px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#243240; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,.1); }
 .npc-dot { width:6px; height:6px; border-radius:50%; background:#c96a1c; box-shadow:0 0 6px rgba(201,106,28,.5); animation:dot-pulse 1.6s ease-in-out infinite; }
@@ -37,45 +37,59 @@ html, body { width:100%; height:100%; margin:0; overflow:hidden; background:#c9d
 #interact-hint.visible { opacity:1; transform:translateX(-50%) translateY(0); }
 
 /* backdrop */
-#backdrop { position:fixed; inset:0; background:rgba(20,28,34,0); pointer-events:none; z-index:19; transition:background .4s; }
-#backdrop.active { background:rgba(20,28,34,.32); pointer-events:auto; }
+#backdrop { position:fixed; inset:0; background:rgba(6,15,32,0); pointer-events:none; z-index:19; transition:background .4s; }
+#backdrop.active { background:rgba(6,15,32,.38); pointer-events:auto; }
 
 /* panel */
-#panel { position:fixed; right:0; top:0; bottom:0; width:390px; max-width:92vw; background:rgba(245,241,230,.98); border-left:1px solid rgba(42,57,69,.14); box-shadow:-14px 0 48px rgba(24,31,38,.18); backdrop-filter:blur(16px); z-index:20; overflow-y:auto; padding:36px 28px 56px; transform:translateX(110%); transition:transform .4s cubic-bezier(.16,1,.3,1); }
+#panel { position:fixed; right:0; top:0; bottom:0; width:420px; max-width:92vw; background:#ffffff; border-left:1px solid rgba(10,22,60,.09); box-shadow:-14px 0 48px rgba(6,15,32,.12); z-index:20; overflow-y:auto; padding:40px 28px 64px; transform:translateX(110%); transition:transform .4s cubic-bezier(.16,1,.3,1); font-family:'Satoshi',sans-serif; }
 #panel.open { transform:translateX(0); }
-#panel-close { position:absolute; top:16px; right:16px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:50%; background:rgba(42,57,69,.08); border:none; cursor:pointer; font-size:15px; color:#243240; transition:background .15s; }
-#panel-close:hover { background:rgba(42,57,69,.15); }
-.panel-emoji { font-size:38px; margin-bottom:10px; display:block; line-height:1; }
-.panel-title { font-size:22px; font-weight:700; color:#1a2730; margin:0 0 5px; letter-spacing:-.02em; }
-.panel-subtitle { font-size:12px; color:rgba(36,49,61,.5); margin:0 0 24px; letter-spacing:.06em; text-transform:uppercase; }
-.panel-divider { border:none; border-top:1px solid rgba(42,57,69,.1); margin:18px 0; }
-.project-card { background:rgba(255,255,255,.55); border:1px solid rgba(42,57,69,.1); border-radius:10px; padding:15px 17px; margin-bottom:11px; transition:box-shadow .2s,transform .2s; }
-.project-card:hover:not(.project-card--muted) { box-shadow:0 4px 16px rgba(0,0,0,.08); transform:translateY(-1px); }
-.project-card--muted { opacity:.6; }
-.project-role { font-size:10px; color:rgba(36,49,61,.42); font-weight:700; letter-spacing:.07em; text-transform:uppercase; margin-bottom:5px; }
-.coming-tag { color:#b07a1a !important; }
-.project-card h3 { margin:0 0 6px; font-size:15px; font-weight:700; color:#1a2730; }
-.project-card p { margin:0 0 10px; font-size:13px; line-height:1.55; color:rgba(36,49,61,.68); }
-.project-tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px; }
-.project-tag { background:rgba(42,57,69,.07); border-radius:4px; padding:2px 8px; font-size:10px; font-weight:700; color:rgba(36,49,61,.6); letter-spacing:.04em; }
-.project-link { display:inline-block; font-size:12px; font-weight:700; color:#2d6e8a; text-decoration:none; letter-spacing:.04em; }
-.project-link:hover { text-decoration:underline; }
-.about-quote { background:rgba(42,57,69,.06); border-left:3px solid rgba(42,57,69,.22); padding:12px 16px; border-radius:0 8px 8px 0; font-size:14px; font-style:italic; color:#1a2730; margin-bottom:18px; line-height:1.5; }
-.about-text { font-size:13px; line-height:1.65; color:rgba(36,49,61,.72); margin-bottom:12px; }
-.about-tags { display:flex; flex-wrap:wrap; gap:6px; margin:14px 0; }
-.about-tag { background:rgba(255,255,255,.6); border:1px solid rgba(42,57,69,.12); border-radius:6px; padding:4px 10px; font-size:11px; font-weight:700; color:#243240; }
-.contact-link { display:flex; align-items:center; gap:13px; background:rgba(255,255,255,.55); border:1px solid rgba(42,57,69,.1); border-radius:10px; padding:13px 16px; margin-bottom:10px; text-decoration:none; color:#1a2730; font-size:13px; font-weight:600; transition:box-shadow .2s,transform .2s; }
-.contact-link:hover { box-shadow:0 4px 16px rgba(0,0,0,.08); transform:translateY(-1px); }
-.contact-icon { width:34px; height:34px; border-radius:8px; background:rgba(42,57,69,.09); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:800; flex-shrink:0; font-style:normal; }
-.contact-sub { font-size:10px; color:rgba(36,49,61,.42); font-weight:400; margin-top:1px; display:block; }
-.contact-meta { padding:2px 0; }
-.meta-row { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(42,57,69,.07); font-size:12px; }
-.meta-key { color:rgba(36,49,61,.45); font-weight:500; }
-.meta-val { color:#1a2730; font-weight:700; }
-.coming-soon { text-align:center; padding:44px 0 28px; color:rgba(36,49,61,.45); font-size:13px; line-height:1.7; }
-.coming-soon .cs-icon { font-size:42px; display:block; margin-bottom:12px; }
-.full-portfolio-link { display:inline-flex; align-items:center; gap:5px; font-size:13px; font-weight:700; color:#2d6e8a; text-decoration:none; margin-top:14px; letter-spacing:.04em; }
-.full-portfolio-link:hover { text-decoration:underline; }
+#panel-close { position:absolute; top:20px; right:20px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; border-radius:50%; background:rgba(10,22,60,.05); border:1px solid rgba(10,22,60,.1); cursor:pointer; font-size:14px; color:#060810; transition:background .15s,border-color .15s; }
+#panel-close:hover { background:rgba(10,22,60,.1); border-color:rgba(10,22,60,.2); }
+
+/* panel typography */
+.p-eyebrow { display:flex; align-items:center; gap:7px; font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#8090b0; margin-bottom:10px; }
+.p-eyebrow-dot { width:6px; height:6px; border-radius:50%; background:#1d5fcc; flex-shrink:0; display:inline-block; }
+.p-title { font-size:26px; font-weight:800; color:#060810; letter-spacing:-.03em; margin:0 0 6px; line-height:1.15; }
+.p-title em { font-style:italic; color:#3d4f6e; font-weight:700; }
+.p-sub { font-size:13px; color:#8090b0; margin:0 0 28px; font-weight:500; }
+
+/* project cards with image */
+.p-card { border:1px solid rgba(10,22,60,.09); border-radius:14px; overflow:hidden; margin-bottom:16px; cursor:pointer; transition:box-shadow .25s,transform .25s,border-color .25s; background:#f4f7ff; }
+.p-card:hover:not(.p-card--soon) { box-shadow:0 8px 28px rgba(6,15,32,.1); transform:translateY(-2px); border-color:rgba(10,22,60,.18); }
+.p-card-img-wrap { position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; }
+.p-card-img { width:100%; height:100%; object-fit:cover; transition:transform .4s cubic-bezier(.16,1,.3,1); display:block; }
+.p-card:hover:not(.p-card--soon) .p-card-img { transform:scale(1.04); }
+.p-card-overlay { position:absolute; inset:0; background:rgba(6,15,32,.72); display:flex; flex-direction:column; justify-content:flex-end; padding:16px; opacity:0; transition:opacity .25s; }
+.p-card:hover:not(.p-card--soon) .p-card-overlay { opacity:1; }
+.p-overlay-title { font-size:14px; font-weight:700; color:#fff; margin-bottom:4px; }
+.p-overlay-desc { font-size:11.5px; color:rgba(255,255,255,.75); line-height:1.45; }
+.p-card-body { padding:14px 16px 16px; }
+.p-card-meta { font-size:10.5px; color:#8090b0; font-weight:600; letter-spacing:.03em; margin-bottom:8px; }
+.p-card-title { font-size:16px; font-weight:700; color:#060810; margin:0 0 6px; letter-spacing:-.01em; }
+.p-card-desc { font-size:12.5px; line-height:1.6; color:#3d4f6e; margin:0 0 12px; }
+.p-btn { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:#060810; border:1px solid rgba(6,8,16,.3); border-radius:100px; padding:7px 14px; text-decoration:none; transition:background .2s,border-color .2s; letter-spacing:.02em; font-family:'Satoshi',sans-serif; }
+.p-btn:hover { background:rgba(6,8,16,.06); border-color:rgba(6,8,16,.6); }
+.p-card--soon { opacity:.65; cursor:default; }
+.p-soon-badge { display:inline-block; font-size:10px; font-weight:700; color:#b07a1a; background:rgba(176,122,26,.1); border-radius:4px; padding:2px 8px; margin-bottom:6px; letter-spacing:.05em; text-transform:uppercase; }
+.p-full-link { display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:#1d5fcc; text-decoration:none; margin-top:8px; letter-spacing:.02em; }
+.p-full-link:hover { text-decoration:underline; }
+
+/* about panel */
+.p-photo { width:100%; aspect-ratio:4/3; object-fit:cover; object-position:center top; border-radius:12px; margin-bottom:24px; display:block; }
+.p-bio { font-size:13px; line-height:1.7; color:#3d4f6e; margin-bottom:12px; }
+.p-bio strong { color:#060810; }
+.p-tags { display:flex; flex-wrap:wrap; gap:7px; margin:16px 0 20px; }
+.p-tag { background:#f4f7ff; border:1px solid rgba(10,22,60,.12); border-radius:100px; padding:5px 12px; font-size:11.5px; font-weight:600; color:#3d4f6e; }
+
+/* contact panel */
+.p-contact-link { display:flex; align-items:center; gap:13px; background:#f4f7ff; border:1px solid rgba(10,22,60,.09); border-radius:12px; padding:14px 16px; margin-bottom:10px; text-decoration:none; color:#060810; font-size:13px; font-weight:600; transition:box-shadow .2s,transform .2s,border-color .2s; }
+.p-contact-link:hover { box-shadow:0 4px 16px rgba(6,15,32,.08); transform:translateY(-1px); border-color:rgba(10,22,60,.18); }
+.p-contact-icon { width:36px; height:36px; border-radius:10px; background:rgba(10,22,60,.07); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.p-contact-sub { font-size:10px; color:#8090b0; font-weight:400; margin-top:1px; display:block; }
+.p-divider { border:none; border-top:1px solid rgba(10,22,60,.08); margin:20px 0; }
+.p-meta-row { display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid rgba(10,22,60,.06); font-size:12px; }
+.p-meta-key { color:#8090b0; font-weight:500; }
+.p-meta-val { color:#060810; font-weight:700; }
 
 /* big npc signs */
 .sign-board-label { position:fixed; pointer-events:none; z-index:6; transform:translate(-50%,-50%); text-align:center; transition:opacity .2s; }
@@ -149,6 +163,8 @@ html, body { width:100%; height:100%; margin:0; overflow:hidden; background:#c9d
   <div id="panel-body"></div>
 </div>
 
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,400&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 <script>
 /* ── scene ── */
@@ -335,7 +351,11 @@ function makeHouse(x, z, s, rot, variant) {
   addTo(g, new THREE.ConeGeometry(1.75*s,1.28*s,18), rm, [0,1.95*s,0], [0,0.18,0], [1.05,0.82,0.9]);
   addTo(g, new THREE.TorusGeometry(1.35*s,0.13*s,8,18), rm, [0,1.34*s,0], [Math.PI/2,0,0], [1.12,0.88,1]);
   addTo(g, new THREE.BoxGeometry(0.56*s,0.84*s,0.1*s), mat.dark, [0,0.6*s,-1.12*s], [0.04,0,0], [1,1,1]);
-  addTo(g, new THREE.CylinderGeometry(0.08*s,0.08*s,0.72*s,8), mat.wood, [0,1.07*s,-1.13*s], [Math.PI/2,0,Math.PI/2], [1,1,1]);
+  // door frame
+  addTo(g, new THREE.BoxGeometry(0.08*s,0.94*s,0.11*s), mat.wood, [-0.33*s,0.57*s,-1.15*s], [0,0,0], [1,1,1]);
+  addTo(g, new THREE.BoxGeometry(0.08*s,0.94*s,0.11*s), mat.wood, [ 0.33*s,0.57*s,-1.15*s], [0,0,0], [1,1,1]);
+  // door knob
+  addTo(g, new THREE.SphereGeometry(0.042*s,8,6), mat.lantern, [0.16*s,0.60*s,-1.18*s], [0,0,0], [0.85,0.85,1.5]);
   addTo(g, new THREE.BoxGeometry(0.36*s,0.32*s,0.08*s), mat.blue, [-0.72*s,0.9*s,-0.82*s], [0,0.2,0], [1,1,1]);
   addTo(g, new THREE.BoxGeometry(0.32*s,0.28*s,0.08*s), mat.blue, [0.76*s,0.88*s,-0.78*s], [0,-0.18,0], [1,1,1]);
   addTo(g, new THREE.CylinderGeometry(0.15*s,0.2*s,0.6*s,8), mat.stoneDark, [0.76*s,2.27*s,0.2*s], [0.15,0,-0.22], [1,1,1]);
@@ -377,6 +397,28 @@ for (var i = 0; i < houseSignData.length; i++) {
 }
 
 
+/* ── border trees (between houses) ── */
+function makeTree(x, z, s, rot) {
+  rot = rot || 0;
+  var g = new THREE.Group();
+  g.position.set(x, 0.41, z); g.rotation.y = rot; scene.add(g);
+  var trunk = addTo(g, new THREE.CylinderGeometry(0.18*s,0.34*s,1.7*s,9), mat.wood, [0,0.85*s,0], [0.2,0,-0.18], [1,1,1]);
+  var crown = addTo(g, new THREE.SphereGeometry(0.95*s,16,10), mat.grassDark, [0.08*s,1.92*s,0], [0,0,0], [1.45,0.82,1.15]);
+  var sA    = addTo(g, new THREE.SphereGeometry(0.58*s,14,8), mat.grass, [-0.75*s,1.75*s,0.08*s], [0,0,0], [1.15,0.76,0.88]);
+  var sB    = addTo(g, new THREE.SphereGeometry(0.52*s,14,8), mat.grass, [0.78*s,1.62*s,-0.1*s], [0,0,0], [1.1,0.76,0.9]);
+  g.userData = { crown:crown, sideA:sA, sideB:sB, baseY:g.position.y };
+  registerCollider(x, z, 0.55*s, 0.55*s);
+  return g;
+}
+var trees = [
+  makeTree(-8.4,  0.3, 0.82,  0.4),  // left — between hW and hA
+  makeTree( 8.4, -0.2, 0.80, -0.3),  // right — between hC and hB
+  makeTree(-3.2, -5.0, 0.76,  1.1),  // top-left — between hW and hC
+  makeTree( 3.2, -5.0, 0.74, -0.8),  // top-right
+  makeTree(-3.2,  5.0, 0.78,  0.6),  // bottom-left — between hA and hB
+  makeTree( 3.2,  5.0, 0.75, -0.4),  // bottom-right
+];
+
 /* ── props ── */
 function makePole(x,z,h,bend,bulb) {
   bend = bend||0; bulb = bulb===undefined?true:bulb;
@@ -388,7 +430,7 @@ function makePole(x,z,h,bend,bulb) {
 
 function makeSign(x,z,rot) {
   rot=rot||0;
-  var g=new THREE.Group(); g.position.set(x,0.72,z); g.rotation.y=rot; scene.add(g);
+  var g=new THREE.Group(); g.position.set(x,0.41,z); g.rotation.y=rot; scene.add(g);
   addTo(g,new THREE.CylinderGeometry(0.06,0.08,1,8),mat.sign,[0,0.5,0],[0,0,0],[1,1,1]);
   var b=addTo(g,new THREE.BoxGeometry(0.74,0.42,0.08),mat.sign,[0.1,1.12,0],[0.04,0.06,0.02],[1,1,1]); b.castShadow=true;
   addTo(g,new THREE.BoxGeometry(0.45,0.04,0.09),mat.dark,[0.12,1.16,0.052],[0,0,0],[1,1,1]);
@@ -530,64 +572,96 @@ function makeRabbit(x,z,rot) {
 }
 
 /* ── NPC: Monkey (free-roaming) ── */
-function makeMonkey() {
-  var mBr=new THREE.MeshStandardMaterial({color:0x5c3317,roughness:0.86,flatShading:true});
-  var mTn=new THREE.MeshStandardMaterial({color:0xd09060,roughness:0.80,flatShading:true});
-  var mDk=new THREE.MeshStandardMaterial({color:0x1a0d06,roughness:0.90,flatShading:true});
-  var g=new THREE.Group(); g.position.set(3,0.42,1); scene.add(g);
-  addTo(g,new THREE.SphereGeometry(0.25,14,10),mBr,[0,0.38,0],[0.05,0,0],[0.92,1.08,0.85]);
-  addTo(g,new THREE.SphereGeometry(0.18,12,8), mTn,[0,0.36,-0.1],[0,0,0],[0.9,0.88,0.42]);
-  addTo(g,new THREE.SphereGeometry(0.22,14,10),mBr,[0,0.78,-0.01],[0,0,0],[1.05,1.0,1.02]);
-  addTo(g,new THREE.SphereGeometry(0.14,12,8), mTn,[0,0.71,-0.18],[0,0,0],[1.1,0.78,0.72]);
-  addTo(g,new THREE.SphereGeometry(0.035,8,6),mDk,[-0.09,0.80,-0.20],[0,0,0],[1,1,0.6]);
-  addTo(g,new THREE.SphereGeometry(0.035,8,6),mDk,[ 0.09,0.80,-0.20],[0,0,0],[1,1,0.6]);
-  addTo(g,new THREE.SphereGeometry(0.062,8,6),mBr,[-0.22,0.86,0.02],[0,0,0],[1,1,0.7]);
-  addTo(g,new THREE.SphereGeometry(0.062,8,6),mBr,[ 0.22,0.86,0.02],[0,0,0],[1,1,0.7]);
-  addTo(g,new THREE.SphereGeometry(0.036,7,5),mTn,[-0.22,0.86,0.02],[0,0,0],[1,0.85,0.6]);
-  addTo(g,new THREE.SphereGeometry(0.036,7,5),mTn,[ 0.22,0.86,0.02],[0,0,0],[1,0.85,0.6]);
-  addTo(g,new THREE.SphereGeometry(0.022,7,5),mDk,[0,0.71,-0.30],[0,0,0],[1.4,0.75,1]);
-  var aL=addTo(g,new THREE.CylinderGeometry(0.038,0.052,0.34,8),mBr,[-0.24,0.40,0],[0.5,0,-0.3],[1,1,1]);
-  var aR=addTo(g,new THREE.CylinderGeometry(0.038,0.052,0.34,8),mBr,[ 0.24,0.40,0],[-0.5,0,0.3],[1,1,1]);
-  var fL=addTo(g,new THREE.SphereGeometry(0.07,8,6),mBr,[-0.12,0.06,-0.05],[0,0,0],[1.1,0.44,1.5]);
-  var fR=addTo(g,new THREE.SphereGeometry(0.07,8,6),mBr,[ 0.12,0.06, 0.05],[0,0,0],[1.1,0.44,1.5]);
-  var tp=[[0,0.24,0.27],[0,0.42,0.50],[0,0.58,0.64],[0,0.70,0.70],[0,0.78,0.66]];
-  for(var ti=0;ti<tp.length;ti++) addTo(g,new THREE.SphereGeometry(0.048-ti*0.006,7,5),mBr,tp[ti],[0,0,0],[0.75,0.75,0.75]);
-  g.userData={aL:aL,aR:aR,fL:fL,fR:fR,verticalVelocity:0,grounded:true,heading:0};
-  return g;
-}
-
-/* ── baby monkey ── */
-function makeBabyMonkey(x, z) {
-  var s = 0.58;
-  var mBr = new THREE.MeshStandardMaterial({color:0x5c3317,roughness:0.86,flatShading:true});
-  var mTn = new THREE.MeshStandardMaterial({color:0xd09060,roughness:0.80,flatShading:true});
-  var mDk = new THREE.MeshStandardMaterial({color:0x1a0d06,roughness:0.90,flatShading:true});
-  var g = new THREE.Group(); g.position.set(x, 0.42*s, z); scene.add(g);
-  addTo(g, new THREE.SphereGeometry(0.25*s,12,8),  mBr, [0,0.38*s,0],    [0.05,0,0],   [0.92,1.08,0.85]);
-  addTo(g, new THREE.SphereGeometry(0.18*s,10,7),  mTn, [0,0.36*s,-0.1*s],[0,0,0],     [0.9,0.88,0.42]);
-  addTo(g, new THREE.SphereGeometry(0.22*s,12,8),  mBr, [0,0.78*s,-0.01*s],[0,0,0],    [1.05,1.0,1.02]);
-  addTo(g, new THREE.SphereGeometry(0.14*s,10,7),  mTn, [0,0.71*s,-0.18*s],[0,0,0],    [1.1,0.78,0.72]);
-  addTo(g, new THREE.SphereGeometry(0.035*s,7,5),  mDk, [-0.09*s,0.80*s,-0.20*s],[0,0,0],[1,1,0.6]);
-  addTo(g, new THREE.SphereGeometry(0.035*s,7,5),  mDk, [ 0.09*s,0.80*s,-0.20*s],[0,0,0],[1,1,0.6]);
-  addTo(g, new THREE.SphereGeometry(0.062*s,7,5),  mBr, [-0.22*s,0.86*s,0.02*s],[0,0,0],[1,1,0.7]);
-  addTo(g, new THREE.SphereGeometry(0.062*s,7,5),  mBr, [ 0.22*s,0.86*s,0.02*s],[0,0,0],[1,1,0.7]);
-  addTo(g, new THREE.SphereGeometry(0.036*s,6,5),  mTn, [-0.22*s,0.86*s,0.02*s],[0,0,0],[1,0.85,0.6]);
-  addTo(g, new THREE.SphereGeometry(0.036*s,6,5),  mTn, [ 0.22*s,0.86*s,0.02*s],[0,0,0],[1,0.85,0.6]);
-  var aL = addTo(g, new THREE.CylinderGeometry(0.038*s,0.052*s,0.34*s,7), mBr, [-0.24*s,0.40*s,0], [0.5,0,-0.3], [1,1,1]);
-  var aR = addTo(g, new THREE.CylinderGeometry(0.038*s,0.052*s,0.34*s,7), mBr, [ 0.24*s,0.40*s,0], [-0.5,0,0.3],[1,1,1]);
-  var fL = addTo(g, new THREE.SphereGeometry(0.07*s,7,5),  mBr, [-0.12*s,0.06*s,-0.05*s],[0,0,0],[1.1,0.44,1.5]);
-  var fR = addTo(g, new THREE.SphereGeometry(0.07*s,7,5),  mBr, [ 0.12*s,0.06*s, 0.05*s],[0,0,0],[1.1,0.44,1.5]);
-  g.userData = {aL:aL, aR:aR, fL:fL, fR:fR, verticalVelocity:0, grounded:true, heading:0};
-  return g;
-}
 
 /* ── panel content ── */
 var PORT = "https://www.juangomezvara.com";
+var SVG_ARROW = '<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 13L13 3M13 3H7M13 3v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var panelContent = {
-  work: '<span class="panel-emoji">&#x1F438;</span><h2 class="panel-title">Projects</h2><p class="panel-subtitle">Selected design work</p><div class="project-card"><div class="project-role">Product Designer &middot; UX Research &middot; UI Design</div><h3>Supply Pro</h3><p>From kitchen chaos to smart logistics. An early warning system built for professional chefs in food operations.</p><div class="project-tags"><span class="project-tag">UX Research</span><span class="project-tag">Product Strategy</span><span class="project-tag">UI Design</span></div><a href="' + PORT + '/project-supply-pro.html" target="_blank" class="project-link">View case study &rarr;</a></div><div class="project-card"><div class="project-role">Product Designer &middot; Branding &middot; UX Strategy</div><h3>Micro-casing App</h3><p>From AI wireframes to developer-ready product in 2 weeks. Mobile app for structured case interview practice &mdash; 508%+ growth.</p><div class="project-tags"><span class="project-tag">Branding</span><span class="project-tag">UX Strategy</span><span class="project-tag">UI Design</span></div><a href="' + PORT + '/project-micro-casing.html" target="_blank" class="project-link">View case study &rarr;</a></div><div class="project-card project-card--muted"><div class="project-role coming-tag">Coming soon</div><h3>Klaro App</h3><p>AI-powered fiscal assistant for Spanish-speaking freelancers in Germany.</p><div class="project-tags"><span class="project-tag">AI / UX</span><span class="project-tag">Product Design</span></div></div><a href="' + PORT + '/#work" target="_blank" class="full-portfolio-link">See all projects &rarr;</a>',
-  about: '<span class="panel-emoji">&#x1F981;</span><h2 class="panel-title">Juan Gomez Vara</h2><p class="panel-subtitle">Product Designer &middot; Berlin</p><div class="about-quote">&ldquo;Connecting dots creates great products.&rdquo;</div><p class="about-text">I come from high-demand kitchens, where the head chef runs a system under pressure &mdash; reading the service in real time, spotting where it\'s about to break, keeping the team aligned.</p><p class="about-text">Today I design digital products with that same philosophy. I step into complex systems, find the patterns that matter and connect business, users and technology. As fast and direct as the context demands.</p><div class="about-tags"><span class="about-tag">&#x1F1E9;&#x1F1EA; Berlin</span><span class="about-tag">&#x2705; Open to work</span><span class="about-tag">&#x26A1; Immediately available</span></div><a href="' + PORT + '/#about" target="_blank" class="full-portfolio-link">Read full story &rarr;</a>',
-  contact: '<span class="panel-emoji">&#x1F98A;</span><h2 class="panel-title">Let\'s Talk</h2><p class="panel-subtitle">Open to full-time roles &middot; Berlin</p><a href="mailto:juangomezvara@gmail.com" class="contact-link"><span class="contact-icon">&#x2709;</span><span>juangomezvara@gmail.com<span class="contact-sub">Email</span></span></a><a href="https://www.linkedin.com/in/juan-gomez-vara-0b409470/" target="_blank" class="contact-link"><span class="contact-icon" style="background:#0A66C2"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></span><span>Juan Gomez Vara<span class="contact-sub">LinkedIn</span></span></a><a href="https://medium.com/@juangomezvara" target="_blank" class="contact-link"><span class="contact-icon" style="background:#000"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg></span><span>@juangomezvara<span class="contact-sub">Medium</span></span></a><hr class="panel-divider"><div class="contact-meta"><div class="meta-row"><span class="meta-key">Location</span><span class="meta-val">Berlin, Germany</span></div><div class="meta-row"><span class="meta-key">Response</span><span class="meta-val">Within one working day</span></div><div class="meta-row"><span class="meta-key">Languages</span><span class="meta-val">EN &middot; ES &middot; FR &middot; DE</span></div><div class="meta-row"><span class="meta-key">Status</span><span class="meta-val">Immediately available</span></div></div><a href="' + PORT + '/contact.html" target="_blank" class="full-portfolio-link" style="margin-top:18px">Open contact form &rarr;</a>',
-  blog: '<span class="panel-emoji">&#x1F430;</span><h2 class="panel-title">Blog</h2><p class="panel-subtitle">Thoughts on design &amp; technology</p><div style="width:100%;height:178px;border-radius:10px;overflow:hidden;margin:0 0 20px;"><img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=600&q=80" alt="Writing" style="width:100%;height:100%;object-fit:cover;object-position:center 40%"></div><hr class="panel-divider"><p class="about-text" style="margin-bottom:10px">Topics I write about:</p><div class="about-tags"><span class="about-tag">Design systems</span><span class="about-tag">AI-native products</span><span class="about-tag">Complex UX</span><span class="about-tag">Freelancer tooling</span></div><a href="https://medium.com/@juangomezvara" target="_blank" class="full-portfolio-link" style="margin-top:20px">Follow on Medium &rarr;</a>',
+  work:
+    '<div class="p-eyebrow"><span class="p-eyebrow-dot"></span>Projects</div>' +
+    '<h2 class="p-title">Products<br><em>designed to work.</em></h2>' +
+    '<p class="p-sub">Product design work. From strategy to shipped.</p>' +
+
+    '<div class="p-card" onclick="window.open(\'https://www.juangomezvara.com/project-supply-pro.html\',\'_blank\')">' +
+      '<div class="p-card-img-wrap"><img src="assets/alainpassard.webp" class="p-card-img" alt="Supply Pro" style="object-position:center bottom">' +
+        '<div class="p-card-overlay"><span class="p-overlay-title">Supply Pro</span><span class="p-overlay-desc">An order management system for food logistics operations.</span></div>' +
+      '</div>' +
+      '<div class="p-card-body">' +
+        '<p class="p-card-meta">Role: Product Designer &nbsp;&middot;&nbsp; UX Research &middot; Product Strategy &middot; UI Design</p>' +
+        '<h3 class="p-card-title">Supply Pro</h3>' +
+        '<p class="p-card-desc">B2B SaaS helping restaurants recover up to &euro;14,400/year before poor supplier management reaches the kitchen.</p>' +
+        '<a href="https://supply-pro-ten.vercel.app/" target="_blank" class="p-btn" onclick="event.stopPropagation()">View live app ' + SVG_ARROW + '</a>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="p-card" onclick="window.open(\'https://www.juangomezvara.com/project-micro-casing.html\',\'_blank\')">' +
+      '<div class="p-card-img-wrap"><img src="assets/Thumbnail-Micro-casing.webp" class="p-card-img" alt="Micro-casing App">' +
+        '<div class="p-card-overlay"><span class="p-overlay-title">Micro-casing App</span><span class="p-overlay-desc">Mobile app for case interview practice. From concept to shipped in 2 weeks.</span></div>' +
+      '</div>' +
+      '<div class="p-card-body">' +
+        '<p class="p-card-meta">Role: Product Designer &nbsp;&middot;&nbsp; Branding &middot; UX Strategy &middot; UI Design</p>' +
+        '<h3 class="p-card-title">Micro-casing App</h3>' +
+        '<p class="p-card-desc">EdTech app helping aspiring consultants land a spot at McKinsey, BCG or Bain. The redesign drove 508% growth.</p>' +
+        '<a href="https://apps.apple.com/gb/app/micro-casing/id6754453873" target="_blank" class="p-btn" onclick="event.stopPropagation()">View live app ' + SVG_ARROW + '</a>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="p-card p-card--soon">' +
+      '<div class="p-card-img-wrap"><img src="assets/klaro-thumbnail.png" class="p-card-img" alt="Klaro App"></div>' +
+      '<div class="p-card-body">' +
+        '<span class="p-soon-badge">Coming soon</span>' +
+        '<h3 class="p-card-title">Klaro App</h3>' +
+        '<p class="p-card-desc">AI-powered fiscal assistant for Spanish-speaking freelancers in Germany.</p>' +
+        '<a href="https://klaro-es.com/" target="_blank" class="p-btn" onclick="event.stopPropagation()">View live app ' + SVG_ARROW + '</a>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="p-card" onclick="window.open(\'https://www.juangomezvara.com/ai-playground.html\',\'_blank\')">' +
+      '<div class="p-card-img-wrap"><img src="assets/ai-portfolio-adventure.webp" class="p-card-img" alt="AI Playground">' +
+        '<div class="p-card-overlay"><span class="p-overlay-title">AI Playground</span><span class="p-overlay-desc">AI experiments, games and interactive prototypes built through vibe coding.</span></div>' +
+      '</div>' +
+      '<div class="p-card-body">' +
+        '<p class="p-card-meta">Role: Product Designer &nbsp;&middot;&nbsp; Vibe Coding &middot; Design Engineer</p>' +
+        '<h3 class="p-card-title">AI Playground</h3>' +
+        '<p class="p-card-desc">A personal playground where I experiment with AI tools, build interactive prototypes and occasionally break things on purpose.</p>' +
+        '<a href="https://www.juangomezvara.com/ai-playground.html" target="_blank" class="p-btn" onclick="event.stopPropagation()">View playground ' + SVG_ARROW + '</a>' +
+      '</div>' +
+    '</div>' +
+
+    '<a href="' + PORT + '/#work" target="_blank" class="p-full-link">See all projects →</a>',
+
+  about:
+    '<div class="p-eyebrow"><span class="p-eyebrow-dot"></span>About me</div>' +
+    '<h2 class="p-title">Finding the pattern<br><em>within the chaos.</em></h2>' +
+    '<img src="assets/juan-photo-new.png" class="p-photo" alt="Juan Gomez Vara">' +
+    '<p class="p-bio"><strong>I\'m a product designer who builds.</strong> My edge is seeing the full picture, from micro to macro, reading how systems connect, where they break, and what it takes to fix them.</p>' +
+    '<p class="p-bio"><strong>My background is unconventional.</strong> Michelin-starred kitchens, brand systems, and now digital products. Each discipline gave me a different lens. Together they gave me pattern recognition most designers don\'t have.</p>' +
+    '<p class="p-bio"><strong>Today my workflow is AI-augmented by design,</strong> not by accident. I build real products. I adapt fast, move with the industry, and treat AI as infrastructure. Not a shortcut. A foundation.</p>' +
+    '<div class="p-tags"><span class="p-tag">&#x1F1E9;&#x1F1EA; Berlin</span><span class="p-tag">&#x2705; Open to work</span><span class="p-tag">&#x26A1; Immediately available</span><span class="p-tag">EN &middot; ES &middot; FR &middot; DE</span></div>' +
+    '<a href="' + PORT + '/#about" target="_blank" class="p-full-link">Read full story →</a>',
+
+  contact:
+    '<div class="p-eyebrow"><span class="p-eyebrow-dot"></span>Contact</div>' +
+    '<h2 class="p-title">From complex problem<br><em>to shipped product.</em></h2>' +
+    '<p class="p-sub">Open to full-time roles &middot; Berlin &middot; Remote</p>' +
+    '<a href="mailto:juangomezvara@gmail.com" class="p-contact-link"><span class="p-contact-icon">&#x2709;</span><span>juangomezvara@gmail.com<span class="p-contact-sub">Email</span></span></a>' +
+    '<a href="tel:+491628393885" class="p-contact-link"><span class="p-contact-icon">&#x1F4DE;</span><span>+49 162 839 3885<span class="p-contact-sub">Phone &middot; WhatsApp</span></span></a>' +
+    '<a href="https://www.linkedin.com/in/juan-gomez-vara-0b409470/" target="_blank" class="p-contact-link"><span class="p-contact-icon" style="background:#0A66C2"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></span><span>Juan Gomez Vara<span class="p-contact-sub">LinkedIn</span></span></a>' +
+    '<a href="https://medium.com/@juangomezvara" target="_blank" class="p-contact-link"><span class="p-contact-icon" style="background:#000"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg></span><span>@juangomezvara<span class="p-contact-sub">Medium</span></span></a>' +
+    '<hr class="p-divider">' +
+    '<div class="p-meta-row"><span class="p-meta-key">Location</span><span class="p-meta-val">Berlin, Germany</span></div>' +
+    '<div class="p-meta-row"><span class="p-meta-key">Response</span><span class="p-meta-val">Within one working day</span></div>' +
+    '<div class="p-meta-row"><span class="p-meta-key">Languages</span><span class="p-meta-val">EN &middot; ES &middot; FR &middot; DE</span></div>' +
+    '<div class="p-meta-row"><span class="p-meta-key">Status</span><span class="p-meta-val">Immediately available</span></div>' +
+    '<a href="' + PORT + '/contact.html" target="_blank" class="p-full-link" style="margin-top:20px">Open contact form →</a>',
+
+  blog:
+    '<div class="p-eyebrow"><span class="p-eyebrow-dot"></span>Blog</div>' +
+    '<h2 class="p-title">Thoughts on design<br><em>&amp; technology.</em></h2>' +
+    '<p class="p-sub">Writing about complex UX, AI-native products and systems thinking.</p>' +
+    '<div style="width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;margin:0 0 20px"><img src="assets/hinting.jpg" alt="Blog" style="width:100%;height:100%;object-fit:cover"></div>' +
+    '<div class="p-tags"><span class="p-tag">Design systems</span><span class="p-tag">AI-native products</span><span class="p-tag">Complex UX</span><span class="p-tag">Freelancer tooling</span></div>' +
+    '<a href="https://medium.com/@juangomezvara" target="_blank" class="p-full-link">Follow on Medium →</a>',
 };
 
 /* ── place characters — each faces toward island centre ── */
@@ -595,15 +669,6 @@ var frog   = makeFrog  (-5.5, -3.8, Math.atan2(-5.5, -3.8));
 var fox    = makeFox   ( 5.5, -3.8, Math.atan2( 5.5, -3.8));
 var lion   = makeLion  (-5.5,  3.8, Math.atan2(-5.5,  3.8));
 var rabbit = makeRabbit( 5.5,  3.8, Math.atan2( 5.5,  3.8));
-var monkey = makeMonkey();
-var monkeyTarget = new THREE.Vector3(4, 0, -2);
-var monkeyJumpTimer = 2.0;
-
-var babies = [
-  { m: makeBabyMonkey(-1, 2),  offsetAngle: 0,            orbitR: 0.9 + Math.random()*0.4, jumpTimer: 0.8, chaseDelay: 0.0 },
-  { m: makeBabyMonkey( 2,-1),  offsetAngle: Math.PI*0.66, orbitR: 0.8 + Math.random()*0.5, jumpTimer: 1.4, chaseDelay: 0.18 },
-  { m: makeBabyMonkey(-2,-1),  offsetAngle: Math.PI*1.32, orbitR: 1.0 + Math.random()*0.4, jumpTimer: 0.5, chaseDelay: 0.32 },
-];
 
 var npcDefs = [
   { id:"work",    name:"Work",    greeting:"Talk to me! 👋", group:frog,   labelOffset:1.25, bubbleEl:null },
@@ -706,7 +771,7 @@ function makeSignTexture(main, sub) {
 function makeNPCSign(x, z, sectionName, tagline) {
   var rot = Math.atan2(x, z);
   var g = new THREE.Group();
-  g.position.set(x, 0.72, z); g.rotation.y = rot; scene.add(g);
+  g.position.set(x, 0.41, z); g.rotation.y = rot; scene.add(g);
 
   // post
   addTo(g, new THREE.CylinderGeometry(0.075, 0.105, 1.82, 8), mat.sign, [0, 0.91, 0], [0.03, 0, 0.02], [1,1,1]);
@@ -729,9 +794,6 @@ function makeNPCSign(x, z, sectionName, tagline) {
   addTo(g, new THREE.BoxGeometry(0.09, 0.30, 0.12), mat.wood, [-0.60, 1.56, 0], [0.08, 0, 0.04], [1,1,1]);
   addTo(g, new THREE.BoxGeometry(0.09, 0.30, 0.12), mat.wood, [ 0.60, 1.56, 0], [0.08, 0,-0.04], [1,1,1]);
 
-  // directional arrow above board — local +Z points toward NPC
-  addTo(g, new THREE.BoxGeometry(0.09, 0.09, 0.54), mat.sign, [0, 2.10, 0.29], [0,0,0], [1,1,1]);
-  addTo(g, new THREE.ConeGeometry(0.16, 0.25, 4), mat.sign, [0, 2.10, 0.60], [-Math.PI/2, Math.PI/4, 0], [1,1,1]);
 
   registerCollider(x, z, 0.30, 0.24);
 }
@@ -936,89 +998,6 @@ function updateUI(t) {
   // sign text is now painted directly onto the 3D mesh via canvas texture — no HTML overlay needed
 }
 
-/* ── monkey AI ── */
-function updateMonkey(dt, t) {
-  var dx = monkeyTarget.x - monkey.position.x;
-  var dz = monkeyTarget.z - monkey.position.z;
-  var dist = Math.sqrt(dx*dx + dz*dz);
-  var moving = dist > 0.6;
-  if (moving) {
-    var spd = 2.8;
-    monkey.position.x += (dx/dist)*spd*dt;
-    monkey.position.z += (dz/dist)*spd*dt;
-    monkey.userData.heading = Math.atan2(dx,dz)+Math.PI;
-  } else {
-    monkeyTarget.set(
-      THREE.MathUtils.clamp((Math.random()-0.5)*16,-8.2,8.2),
-      0,
-      THREE.MathUtils.clamp((Math.random()-0.5)*11,-5.6,5.6)
-    );
-  }
-  monkeyJumpTimer -= dt;
-  if (monkey.userData.grounded && monkeyJumpTimer <= 0) {
-    monkey.userData.verticalVelocity = 3.8+Math.random()*1.4;
-    monkey.userData.grounded = false;
-    monkeyJumpTimer = 1.6+Math.random()*2.2;
-  }
-  monkey.userData.verticalVelocity -= 12.5*dt;
-  monkey.position.y += monkey.userData.verticalVelocity*dt;
-  if (monkey.position.y <= 0.42) { monkey.position.y=0.42; monkey.userData.verticalVelocity=0; monkey.userData.grounded=true; }
-  monkey.position.x = Math.max(-8.5,Math.min(8.5,monkey.position.x));
-  monkey.position.z = Math.max(-5.8,Math.min(5.8,monkey.position.z));
-  monkey.rotation.y = THREE.MathUtils.lerp(monkey.rotation.y, monkey.userData.heading, 0.1);
-  if (monkey.userData.grounded) monkey.position.y = 0.42+Math.sin(t*9)*(moving?0.015:0.005);
-  var sw = Math.sin(t*8)*(moving?0.5:0.04);
-  monkey.userData.aL.rotation.x = -sw*0.6;
-  monkey.userData.aR.rotation.x =  sw*0.6;
-  var wk = t*8;
-  monkey.userData.fL.position.y = Math.max(0,Math.sin(wk))*0.1;
-  monkey.userData.fR.position.y = Math.max(0,Math.sin(wk+Math.PI))*0.1;
-}
-
-/* ── baby monkey AI ── */
-function updateBabies(dt, t) {
-  for (var i = 0; i < babies.length; i++) {
-    var b = babies[i];
-    var m = b.m;
-    // target = big monkey pos + orbiting offset that shifts over time (playful circling)
-    b.offsetAngle += dt * (1.4 + i * 0.3) * (i % 2 === 0 ? 1 : -1);
-    var lag = t - b.chaseDelay;
-    var tx = monkey.position.x + Math.cos(b.offsetAngle) * b.orbitR;
-    var tz = monkey.position.z + Math.sin(b.offsetAngle) * b.orbitR;
-    var dx = tx - m.position.x;
-    var dz = tz - m.position.z;
-    var dist = Math.sqrt(dx*dx + dz*dz);
-    var moving = dist > 0.25;
-    if (moving) {
-      var spd = 3.4 + i * 0.2; // babies slightly faster — chaotic energy
-      m.position.x += (dx/dist) * spd * dt;
-      m.position.z += (dz/dist) * spd * dt;
-      m.userData.heading = Math.atan2(dx, dz) + Math.PI;
-    }
-    // clamp to island
-    m.position.x = Math.max(-8.2, Math.min(8.2, m.position.x));
-    m.position.z = Math.max(-5.5, Math.min(5.5, m.position.z));
-    // jump — babies jump more often
-    b.jumpTimer -= dt;
-    if (m.userData.grounded && b.jumpTimer <= 0) {
-      m.userData.verticalVelocity = 2.8 + Math.random() * 1.8;
-      m.userData.grounded = false;
-      b.jumpTimer = 0.7 + Math.random() * 1.4;
-    }
-    m.userData.verticalVelocity -= 12.5 * dt;
-    m.position.y += m.userData.verticalVelocity * dt;
-    var groundY = 0.42 * 0.58;
-    if (m.position.y <= groundY) { m.position.y = groundY; m.userData.verticalVelocity = 0; m.userData.grounded = true; }
-    m.rotation.y = THREE.MathUtils.lerp(m.rotation.y, m.userData.heading, 0.14);
-    if (m.userData.grounded) m.position.y = groundY + Math.sin(t*11 + i*2.1) * (moving ? 0.012 : 0.004);
-    var sw = Math.sin(t*10 + i) * (moving ? 0.55 : 0.06);
-    m.userData.aL.rotation.x = -sw * 0.7;
-    m.userData.aR.rotation.x =  sw * 0.7;
-    var wk = t*10 + i;
-    m.userData.fL.position.y = Math.max(0, Math.sin(wk))    * 0.06;
-    m.userData.fR.position.y = Math.max(0, Math.sin(wk+Math.PI)) * 0.06;
-  }
-}
 
 /* ── animate ── */
 function animate() {
@@ -1026,12 +1005,16 @@ function animate() {
   var t = clock.elapsedTime;
 
   updatePlayer(dt, t);
-  updateMonkey(dt, t);
-  updateBabies(dt, t);
 
   for (var i = 0; i < houses.length; i++) {
     houses[i].position.y = houses[i].userData.baseY + Math.sin(t*0.45 + i*1.7) * 0.006;
     houses[i].rotation.z = Math.sin(t*0.35 + i) * 0.003;
+  }
+  for (var i = 0; i < trees.length; i++) {
+    var sw = Math.sin(t*0.95 + i) * 0.035;
+    trees[i].userData.crown.rotation.z = sw;
+    trees[i].userData.sideA.rotation.z = sw * 1.3;
+    trees[i].userData.sideB.rotation.z = sw * 1.1;
   }
   water.material.opacity = 0.36 + Math.sin(t*0.5) * 0.04;
   updateUI(t);
@@ -1087,7 +1070,7 @@ musicBtn.addEventListener("click", function(e) {
   setTimeout(function() {
     if (!th) return;
     th.classList.add("show");
-    var autoHide = setTimeout(hideTH, 5500);
+    var autoHide = setTimeout(hideTH, 10000);
     function dismiss() { clearTimeout(autoHide); hideTH(); }
     window.addEventListener("keydown",    dismiss, { once: true });
     window.addEventListener("pointerdown", dismiss, { once: true });
