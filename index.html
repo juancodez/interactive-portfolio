@@ -69,10 +69,12 @@ html, body { width:100%; height:100%; margin:0; overflow:hidden; background:#c9d
 .p-card-desc { font-size:12.5px; line-height:1.6; color:#3d4f6e; margin:0 0 12px; }
 .p-btn { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:#060810; border:1px solid rgba(6,8,16,.3); border-radius:100px; padding:7px 14px; text-decoration:none; transition:background .2s,border-color .2s; letter-spacing:.02em; font-family:'Satoshi',sans-serif; }
 .p-btn:hover { background:rgba(6,8,16,.06); border-color:rgba(6,8,16,.6); }
+.p-btn svg { flex-shrink:0; }
+.p-full-link svg { transform:rotate(-45deg); flex-shrink:0; }
 .p-card--soon { opacity:.65; cursor:default; }
 .p-soon-badge { display:inline-block; font-size:10px; font-weight:700; color:#b07a1a; background:rgba(176,122,26,.1); border-radius:4px; padding:2px 8px; margin-bottom:6px; letter-spacing:.05em; text-transform:uppercase; }
-.p-full-link { display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:#1d5fcc; text-decoration:none; margin-top:8px; letter-spacing:.02em; }
-.p-full-link:hover { text-decoration:underline; }
+.p-full-link { display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg,#060f20 0%,#0f2552 50%,#1d5fcc 100%); color:#fff; border-radius:100px; padding:11px 22px; font-size:13px; font-weight:700; text-decoration:none; margin-top:16px; letter-spacing:.04em; transition:opacity .2s; }
+.p-full-link:hover { opacity:.85; text-decoration:none; }
 
 /* about panel */
 .p-photo { width:100%; aspect-ratio:4/3; object-fit:cover; object-position:center top; border-radius:12px; margin-bottom:24px; display:block; }
@@ -628,7 +630,7 @@ var panelContent = {
       '</div>' +
     '</div>' +
 
-    '<a href="' + PORT + '/#work" target="_blank" class="p-full-link">See all projects →</a>',
+    '<a href="' + PORT + '/#work" target="_blank" class="p-full-link">See all projects <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>',
 
   about:
     '<div class="p-eyebrow"><span class="p-eyebrow-dot"></span>About me</div>' +
@@ -638,7 +640,7 @@ var panelContent = {
     '<p class="p-bio"><strong>My background is unconventional.</strong> Michelin-starred kitchens, brand systems, and now digital products. Each discipline gave me a different lens. Together they gave me pattern recognition most designers don\'t have.</p>' +
     '<p class="p-bio"><strong>Today my workflow is AI-augmented by design,</strong> not by accident. I build real products. I adapt fast, move with the industry, and treat AI as infrastructure. Not a shortcut. A foundation.</p>' +
     '<div class="p-tags"><span class="p-tag">&#x1F1E9;&#x1F1EA; Berlin</span><span class="p-tag">&#x2705; Open to work</span><span class="p-tag">&#x26A1; Immediately available</span><span class="p-tag">EN &middot; ES &middot; FR &middot; DE</span></div>' +
-    '<a href="' + PORT + '/#about" target="_blank" class="p-full-link">Read full story →</a>',
+    '<a href="' + PORT + '/#about" target="_blank" class="p-full-link">Read full story <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>',
 
   contact:
     '<div class="p-eyebrow"><span class="p-eyebrow-dot"></span>Contact</div>' +
@@ -653,7 +655,7 @@ var panelContent = {
     '<div class="p-meta-row"><span class="p-meta-key">Response</span><span class="p-meta-val">Within one working day</span></div>' +
     '<div class="p-meta-row"><span class="p-meta-key">Languages</span><span class="p-meta-val">EN &middot; ES &middot; FR &middot; DE</span></div>' +
     '<div class="p-meta-row"><span class="p-meta-key">Status</span><span class="p-meta-val">Immediately available</span></div>' +
-    '<a href="' + PORT + '/contact.html" target="_blank" class="p-full-link" style="margin-top:20px">Open contact form →</a>',
+    '<a href="' + PORT + '/contact.html" target="_blank" class="p-full-link" style="margin-top:20px">Contact <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>',
 
   blog:
     '<div class="p-eyebrow"><span class="p-eyebrow-dot"></span>Blog</div>' +
@@ -661,7 +663,7 @@ var panelContent = {
     '<p class="p-sub">Writing about complex UX, AI-native products and systems thinking.</p>' +
     '<div style="width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;margin:0 0 20px"><img src="assets/hinting.jpg" alt="Blog" style="width:100%;height:100%;object-fit:cover"></div>' +
     '<div class="p-tags"><span class="p-tag">Design systems</span><span class="p-tag">AI-native products</span><span class="p-tag">Complex UX</span><span class="p-tag">Freelancer tooling</span></div>' +
-    '<a href="https://medium.com/@juangomezvara" target="_blank" class="p-full-link">Follow on Medium →</a>',
+    '<a href="https://medium.com/@juangomezvara" target="_blank" class="p-full-link">Follow on Medium <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>',
 };
 
 /* ── place characters — each faces toward island centre ── */
@@ -890,6 +892,30 @@ function closePanel() {
 }
 document.getElementById("panel-close").addEventListener("click", closePanel);
 backdrop.addEventListener("click", closePanel);
+
+// Swipe-to-close panel (mobile)
+(function() {
+  var startX = 0, startY = 0, dx = 0, locked = false;
+  panelEl.addEventListener("touchstart", function(e) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    dx = 0; locked = false;
+    panelEl.style.transition = "none";
+  }, { passive: true });
+  panelEl.addEventListener("touchmove", function(e) {
+    if (locked) return;
+    dx = e.touches[0].clientX - startX;
+    var dy = e.touches[0].clientY - startY;
+    if (Math.abs(dy) > Math.abs(dx)) { locked = true; panelEl.style.transition = ""; return; }
+    if (dx > 0) panelEl.style.transform = "translateX(" + dx + "px)";
+  }, { passive: true });
+  panelEl.addEventListener("touchend", function() {
+    panelEl.style.transition = "";
+    if (dx > 80) { closePanel(); }
+    else { panelEl.style.transform = panelOpen ? "" : "translateX(110%)"; }
+    dx = 0;
+  });
+})();
 
 /* ── player update ── */
 function updatePlayer(dt, t) {
