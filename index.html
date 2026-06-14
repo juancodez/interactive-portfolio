@@ -305,7 +305,16 @@ function makeIsland() {
   for (var i = 0; i < sides.length; i++) { var d=sides[i]; addTo(g, new THREE.BoxGeometry(1,1,1,2,1,2), mat.stoneDark, [d[0],d[1],d[2]], [0,0,0], [d[3],d[4],d[5]]); }
   var gp = [[-8.4,0.48,-5.1,3,0.08,2.1],[-8.25,0.48,5,3.2,0.08,2],[8.1,0.49,-5.1,3.2,0.08,2.1],[8,0.49,5,3.1,0.08,2],[-2.1,0.5,-5,3.2,0.08,2],[2.1,0.5,5,3.2,0.08,2]];
   for (var i = 0; i < gp.length; i++) { var d=gp[i]; addTo(g, new THREE.BoxGeometry(1,1,1), mat.grass, [d[0],d[1],d[2]], [0,0,0], [d[3],d[4],d[5]]); }
-  var paths = [[0,0.535,0,2.4,0.055,13.2],[0,0.54,0,12.5,0.055,2],[-5,0.54,-3.95,5.8,0.055,1.4],[5,0.54,-3.95,5.8,0.055,1.4],[-5,0.54,3.95,5.8,0.055,1.4],[5,0.54,3.95,5.8,0.055,1.4],[0,0.54,-3.95,1.8,0.055,5.2],[0,0.54,3.95,1.8,0.055,5.2]];
+  var paths = [
+    [0,0.535,0,2.4,0.055,13.2],          // center vertical strip
+    [0,0.54,0,12.5,0.055,2],             // center horizontal strip
+    [-4.55,0.54,-3.95,6.7,0.055,1.4],   // left-top  (extended to meet center vertical)
+    [ 4.55,0.54,-3.95,6.7,0.055,1.4],   // right-top
+    [-4.55,0.54, 3.95,6.7,0.055,1.4],   // left-bottom
+    [ 4.55,0.54, 3.95,6.7,0.055,1.4],   // right-bottom
+    [0,0.54,-3.95,2.5,0.055,5.9],       // center-top  (widened + lengthened to meet center horiz)
+    [0,0.54, 3.95,2.5,0.055,5.9],       // center-bottom
+  ];
   for (var i = 0; i < paths.length; i++) { var d=paths[i]; addTo(g, new THREE.BoxGeometry(1,1,1), mat.dirt, [d[0],d[1],d[2]], [0,0,0], [d[3],d[4],d[5]]); }
   var rocks = [[-8.7,-5.7],[-7.9,-4.9],[-8.5,5.5],[-7,4.6],[8.6,-5.6],[7.6,-4.7],[8.2,5.5],[7,4.7],[-1,-6],[1.2,-5.8],[-1.3,6],[1.1,5.8]];
   for (var i = 0; i < rocks.length; i++) { var rx=rocks[i][0], rz=rocks[i][1], rr=0.16+Math.random()*0.38; addTo(g, new THREE.DodecahedronGeometry(rr,0), Math.random()>0.5?mat.stoneDark:mat.stone, [rx,0.64+rr*0.18,rz],[Math.random(),Math.random(),Math.random()],[1.2,0.55+Math.random()*0.3,0.9]); }
@@ -336,10 +345,8 @@ function makeHouse(x, z, s, rot, variant) {
     var a = -Math.PI*0.78 + i*0.17;
     addTo(g, new THREE.CylinderGeometry(0.018*s,0.03*s,0.55*s,5), mat.roofLeaf, [Math.sin(a)*1.32*s, 1.5*s+Math.random()*0.2*s, Math.cos(a)*1.04*s], [0.75,0,-a], [1,1,1]);
   }
-  // sign board above door
+  // sign board above door (no decorative lines)
   addTo(g, new THREE.BoxGeometry(0.9*s,0.3*s,0.1*s), mat.sign, [0,1.13*s,-1.17*s], [0.04,0,0], [1,1,1]);
-  addTo(g, new THREE.BoxGeometry(0.58*s,0.048*s,0.11*s), mat.dark, [0,1.18*s,-1.18*s], [0.04,0,0], [1,1,1]);
-  addTo(g, new THREE.BoxGeometry(0.4*s,0.042*s,0.11*s), mat.dark, [-0.06*s,1.1*s,-1.18*s], [0.04,0,0], [1,1,1]);
   g.userData.baseY = g.position.y;
   registerCollider(x, z, 1.55*s, 1.45*s);
   return g;
@@ -369,25 +376,6 @@ for (var i = 0; i < houseSignData.length; i++) {
   h.labelEl = null; // labels now live on the wooden NPC signs only
 }
 
-/* ── trees ── */
-function makeTree(x, z, s, rot) {
-  rot = rot || 0;
-  var g = new THREE.Group();
-  g.position.set(x, 0.72, z); g.rotation.y = rot; scene.add(g);
-  var trunk = addTo(g, new THREE.CylinderGeometry(0.18*s,0.34*s,1.7*s,9), mat.wood, [0,0.85*s,0], [0.2,0,-0.18], [1,1,1]);
-  var crown = addTo(g, new THREE.SphereGeometry(0.95*s,16,10), mat.grassDark, [0.08*s,1.92*s,0], [0,0,0], [1.45,0.82,1.15]);
-  var sA    = addTo(g, new THREE.SphereGeometry(0.58*s,14,8), mat.grass, [-0.75*s,1.75*s,0.08*s], [0,0,0], [1.15,0.76,0.88]);
-  var sB    = addTo(g, new THREE.SphereGeometry(0.52*s,14,8), mat.grass, [0.78*s,1.62*s,-0.1*s], [0,0,0], [1.1,0.76,0.9]);
-  g.userData = { crown:crown, sideA:sA, sideB:sB, baseY:g.position.y };
-  registerCollider(x, z, 0.55*s, 0.55*s);
-  return g;
-}
-var trees = [
-  makeTree(-8.8,-5.1,1.12,0.4), makeTree(-8.0,5.6,1.0,-0.2),
-  makeTree(-2.3,6.0,0.92,0.9),  makeTree(2.8,-6.1,1.0,0.2),
-  makeTree(8.8,5.2,1.12,-0.7),  makeTree(9.0,-1.2,0.88,0.1),
-  makeTree(-3.0,1.5,0.72,1.1),  makeTree(3.2,-1.5,0.7,-0.6),
-];
 
 /* ── props ── */
 function makePole(x,z,h,bend,bulb) {
@@ -397,7 +385,6 @@ function makePole(x,z,h,bend,bulb) {
   if (bulb) addTo(g,new THREE.SphereGeometry(0.22,16,10),mat.teal,[Math.sin(bend)*h*0.3,h+0.08,0],[0,0,0],[1.15,0.9,1.15]);
   registerCollider(x,z,0.25,0.25);
 }
-makePole(-4.1,-1.52,2.35,-0.28); makePole(-1.35,-2.05,2.1,0.16); makePole(3.85,-1.52,2.25,0.22);
 
 function makeSign(x,z,rot) {
   rot=rot||0;
@@ -408,7 +395,6 @@ function makeSign(x,z,rot) {
   addTo(g,new THREE.BoxGeometry(0.28,0.04,0.09),mat.dark,[0.04,1.04,0.052],[0,0,0],[1,1,1]);
   registerCollider(x,z,0.45,0.35);
 }
-makeSign(-2.3,1.75,0.6); makeSign(0.55,-2.88,-0.22);
 
 function makeFence(x,z,rot,count) {
   rot=rot||0; count=count||4;
@@ -543,6 +529,58 @@ function makeRabbit(x,z,rot) {
   g.userData.baseY=g.position.y; registerCollider(x,z,0.42,0.42); return g;
 }
 
+/* ── NPC: Monkey (free-roaming) ── */
+function makeMonkey() {
+  var mBr=new THREE.MeshStandardMaterial({color:0x5c3317,roughness:0.86,flatShading:true});
+  var mTn=new THREE.MeshStandardMaterial({color:0xd09060,roughness:0.80,flatShading:true});
+  var mDk=new THREE.MeshStandardMaterial({color:0x1a0d06,roughness:0.90,flatShading:true});
+  var g=new THREE.Group(); g.position.set(3,0.42,1); scene.add(g);
+  addTo(g,new THREE.SphereGeometry(0.25,14,10),mBr,[0,0.38,0],[0.05,0,0],[0.92,1.08,0.85]);
+  addTo(g,new THREE.SphereGeometry(0.18,12,8), mTn,[0,0.36,-0.1],[0,0,0],[0.9,0.88,0.42]);
+  addTo(g,new THREE.SphereGeometry(0.22,14,10),mBr,[0,0.78,-0.01],[0,0,0],[1.05,1.0,1.02]);
+  addTo(g,new THREE.SphereGeometry(0.14,12,8), mTn,[0,0.71,-0.18],[0,0,0],[1.1,0.78,0.72]);
+  addTo(g,new THREE.SphereGeometry(0.035,8,6),mDk,[-0.09,0.80,-0.20],[0,0,0],[1,1,0.6]);
+  addTo(g,new THREE.SphereGeometry(0.035,8,6),mDk,[ 0.09,0.80,-0.20],[0,0,0],[1,1,0.6]);
+  addTo(g,new THREE.SphereGeometry(0.062,8,6),mBr,[-0.22,0.86,0.02],[0,0,0],[1,1,0.7]);
+  addTo(g,new THREE.SphereGeometry(0.062,8,6),mBr,[ 0.22,0.86,0.02],[0,0,0],[1,1,0.7]);
+  addTo(g,new THREE.SphereGeometry(0.036,7,5),mTn,[-0.22,0.86,0.02],[0,0,0],[1,0.85,0.6]);
+  addTo(g,new THREE.SphereGeometry(0.036,7,5),mTn,[ 0.22,0.86,0.02],[0,0,0],[1,0.85,0.6]);
+  addTo(g,new THREE.SphereGeometry(0.022,7,5),mDk,[0,0.71,-0.30],[0,0,0],[1.4,0.75,1]);
+  var aL=addTo(g,new THREE.CylinderGeometry(0.038,0.052,0.34,8),mBr,[-0.24,0.40,0],[0.5,0,-0.3],[1,1,1]);
+  var aR=addTo(g,new THREE.CylinderGeometry(0.038,0.052,0.34,8),mBr,[ 0.24,0.40,0],[-0.5,0,0.3],[1,1,1]);
+  var fL=addTo(g,new THREE.SphereGeometry(0.07,8,6),mBr,[-0.12,0.06,-0.05],[0,0,0],[1.1,0.44,1.5]);
+  var fR=addTo(g,new THREE.SphereGeometry(0.07,8,6),mBr,[ 0.12,0.06, 0.05],[0,0,0],[1.1,0.44,1.5]);
+  var tp=[[0,0.24,0.27],[0,0.42,0.50],[0,0.58,0.64],[0,0.70,0.70],[0,0.78,0.66]];
+  for(var ti=0;ti<tp.length;ti++) addTo(g,new THREE.SphereGeometry(0.048-ti*0.006,7,5),mBr,tp[ti],[0,0,0],[0.75,0.75,0.75]);
+  g.userData={aL:aL,aR:aR,fL:fL,fR:fR,verticalVelocity:0,grounded:true,heading:0};
+  return g;
+}
+
+/* ── baby monkey ── */
+function makeBabyMonkey(x, z) {
+  var s = 0.58;
+  var mBr = new THREE.MeshStandardMaterial({color:0x5c3317,roughness:0.86,flatShading:true});
+  var mTn = new THREE.MeshStandardMaterial({color:0xd09060,roughness:0.80,flatShading:true});
+  var mDk = new THREE.MeshStandardMaterial({color:0x1a0d06,roughness:0.90,flatShading:true});
+  var g = new THREE.Group(); g.position.set(x, 0.42*s, z); scene.add(g);
+  addTo(g, new THREE.SphereGeometry(0.25*s,12,8),  mBr, [0,0.38*s,0],    [0.05,0,0],   [0.92,1.08,0.85]);
+  addTo(g, new THREE.SphereGeometry(0.18*s,10,7),  mTn, [0,0.36*s,-0.1*s],[0,0,0],     [0.9,0.88,0.42]);
+  addTo(g, new THREE.SphereGeometry(0.22*s,12,8),  mBr, [0,0.78*s,-0.01*s],[0,0,0],    [1.05,1.0,1.02]);
+  addTo(g, new THREE.SphereGeometry(0.14*s,10,7),  mTn, [0,0.71*s,-0.18*s],[0,0,0],    [1.1,0.78,0.72]);
+  addTo(g, new THREE.SphereGeometry(0.035*s,7,5),  mDk, [-0.09*s,0.80*s,-0.20*s],[0,0,0],[1,1,0.6]);
+  addTo(g, new THREE.SphereGeometry(0.035*s,7,5),  mDk, [ 0.09*s,0.80*s,-0.20*s],[0,0,0],[1,1,0.6]);
+  addTo(g, new THREE.SphereGeometry(0.062*s,7,5),  mBr, [-0.22*s,0.86*s,0.02*s],[0,0,0],[1,1,0.7]);
+  addTo(g, new THREE.SphereGeometry(0.062*s,7,5),  mBr, [ 0.22*s,0.86*s,0.02*s],[0,0,0],[1,1,0.7]);
+  addTo(g, new THREE.SphereGeometry(0.036*s,6,5),  mTn, [-0.22*s,0.86*s,0.02*s],[0,0,0],[1,0.85,0.6]);
+  addTo(g, new THREE.SphereGeometry(0.036*s,6,5),  mTn, [ 0.22*s,0.86*s,0.02*s],[0,0,0],[1,0.85,0.6]);
+  var aL = addTo(g, new THREE.CylinderGeometry(0.038*s,0.052*s,0.34*s,7), mBr, [-0.24*s,0.40*s,0], [0.5,0,-0.3], [1,1,1]);
+  var aR = addTo(g, new THREE.CylinderGeometry(0.038*s,0.052*s,0.34*s,7), mBr, [ 0.24*s,0.40*s,0], [-0.5,0,0.3],[1,1,1]);
+  var fL = addTo(g, new THREE.SphereGeometry(0.07*s,7,5),  mBr, [-0.12*s,0.06*s,-0.05*s],[0,0,0],[1.1,0.44,1.5]);
+  var fR = addTo(g, new THREE.SphereGeometry(0.07*s,7,5),  mBr, [ 0.12*s,0.06*s, 0.05*s],[0,0,0],[1.1,0.44,1.5]);
+  g.userData = {aL:aL, aR:aR, fL:fL, fR:fR, verticalVelocity:0, grounded:true, heading:0};
+  return g;
+}
+
 /* ── panel content ── */
 var PORT = "https://www.juangomezvara.com";
 var panelContent = {
@@ -557,6 +595,15 @@ var frog   = makeFrog  (-5.5, -3.8, Math.atan2(-5.5, -3.8));
 var fox    = makeFox   ( 5.5, -3.8, Math.atan2( 5.5, -3.8));
 var lion   = makeLion  (-5.5,  3.8, Math.atan2(-5.5,  3.8));
 var rabbit = makeRabbit( 5.5,  3.8, Math.atan2( 5.5,  3.8));
+var monkey = makeMonkey();
+var monkeyTarget = new THREE.Vector3(4, 0, -2);
+var monkeyJumpTimer = 2.0;
+
+var babies = [
+  { m: makeBabyMonkey(-1, 2),  offsetAngle: 0,            orbitR: 0.9 + Math.random()*0.4, jumpTimer: 0.8, chaseDelay: 0.0 },
+  { m: makeBabyMonkey( 2,-1),  offsetAngle: Math.PI*0.66, orbitR: 0.8 + Math.random()*0.5, jumpTimer: 1.4, chaseDelay: 0.18 },
+  { m: makeBabyMonkey(-2,-1),  offsetAngle: Math.PI*1.32, orbitR: 1.0 + Math.random()*0.4, jumpTimer: 0.5, chaseDelay: 0.32 },
+];
 
 var npcDefs = [
   { id:"work",    name:"Work",    greeting:"Talk to me! 👋", group:frog,   labelOffset:1.25, bubbleEl:null },
@@ -626,24 +673,28 @@ function makeSignTexture(main, sub) {
     ctx.beginPath(); ctx.arc(cx,cy,8,0,Math.PI*2); ctx.fill();
   }
 
+  // dark overlay band — boosts text contrast on the wood texture
+  ctx.fillStyle = "rgba(0,0,0,.38)";
+  ctx.fillRect(12, H*0.08, W-24, H*0.86);
+
   // main text (section name)
   ctx.textAlign = "center"; ctx.textBaseline = "middle";
-  ctx.font = "bold 74px 'Trebuchet MS', Impact, Arial, sans-serif";
-  // bright top-left highlight for emboss look
-  ctx.fillStyle = "rgba(255,215,120,.55)";
-  ctx.fillText(main.toUpperCase(), W/2-1.5, H*0.40-1.5);
-  // very dark carved-wood colour — maximum contrast
-  ctx.fillStyle = "#0f0400";
+  ctx.font = "bold 92px 'Trebuchet MS', Impact, Arial, sans-serif";
+  // warm highlight (emboss)
+  ctx.fillStyle = "rgba(255,230,140,.70)";
+  ctx.fillText(main.toUpperCase(), W/2-2, H*0.40-2);
+  // pure white — maximum contrast on darkened overlay
+  ctx.fillStyle = "#ffffff";
   ctx.fillText(main.toUpperCase(), W/2, H*0.40);
 
   // sub text (tagline)
-  ctx.font = "600 32px 'Trebuchet MS', Arial, sans-serif";
-  // highlight
-  ctx.fillStyle = "rgba(255,210,110,.45)";
-  ctx.fillText(sub, W/2-1, H*0.76-1);
-  // dark fill
-  ctx.fillStyle = "#180800";
-  ctx.fillText(sub, W/2, H*0.76);
+  ctx.font = "600 40px 'Trebuchet MS', Arial, sans-serif";
+  // warm highlight
+  ctx.fillStyle = "rgba(255,225,130,.60)";
+  ctx.fillText(sub, W/2-1.5, H*0.78-1.5);
+  // cream fill
+  ctx.fillStyle = "#f5e8c4";
+  ctx.fillText(sub, W/2, H*0.78);
 
   var tex = new THREE.CanvasTexture(cv);
   tex.colorSpace = THREE.SRGBColorSpace;
@@ -678,33 +729,47 @@ function makeNPCSign(x, z, sectionName, tagline) {
   addTo(g, new THREE.BoxGeometry(0.09, 0.30, 0.12), mat.wood, [-0.60, 1.56, 0], [0.08, 0, 0.04], [1,1,1]);
   addTo(g, new THREE.BoxGeometry(0.09, 0.30, 0.12), mat.wood, [ 0.60, 1.56, 0], [0.08, 0,-0.04], [1,1,1]);
 
-  // small leaf-green cone top
-  addTo(g, new THREE.ConeGeometry(0.12, 0.24, 6), mat.roofLeaf, [0, 2.04, 0], [0, 0.12, 0], [1.1,1,1]);
+  // directional arrow above board — local +Z points toward NPC
+  addTo(g, new THREE.BoxGeometry(0.09, 0.09, 0.54), mat.sign, [0, 2.10, 0.29], [0,0,0], [1,1,1]);
+  addTo(g, new THREE.ConeGeometry(0.16, 0.25, 4), mat.sign, [0, 2.10, 0.60], [-Math.PI/2, Math.PI/4, 0], [1,1,1]);
 
   registerCollider(x, z, 0.30, 0.24);
 }
 
-// signs near each character (section name + tagline painted on wood texture)
-makeNPCSign(-4.6, -2.8, "Work",    "See my projects");
-makeNPCSign( 4.6, -2.8, "Contact", "Let's connect!");
-makeNPCSign(-4.6,  2.8, "About",   "Who am I?");
-makeNPCSign( 4.6,  2.8, "Blog",    "Read my blog!");
+// directional signs — midpoint between centre and each NPC
+makeNPCSign(-3.0, -2.2, "Work",    "See my projects");
+makeNPCSign( 3.0, -2.2, "Contact", "Let's connect!");
+makeNPCSign(-3.0,  2.2, "About",   "Who am I?");
+makeNPCSign( 3.0,  2.2, "Blog",    "Read my blog!");
 
 /* ── scatter plants ── */
 (function() {
+  function onPath(x, z) {
+    var p = 0.3;
+    if (Math.abs(x) < 1.2+p && Math.abs(z) < 6.6)                         return true; // center vertical
+    if (Math.abs(x) < 6.25  && Math.abs(z) < 1.0+p)                       return true; // center horizontal
+    if (Math.abs(x+4.55) < 3.35+p && Math.abs(z+3.95) < 0.7+p)           return true; // left-top
+    if (Math.abs(x-4.55) < 3.35+p && Math.abs(z+3.95) < 0.7+p)           return true; // right-top
+    if (Math.abs(x+4.55) < 3.35+p && Math.abs(z-3.95) < 0.7+p)           return true; // left-bottom
+    if (Math.abs(x-4.55) < 3.35+p && Math.abs(z-3.95) < 0.7+p)           return true; // right-bottom
+    if (Math.abs(x) < 1.25+p && Math.abs(z+3.95) < 2.95)                 return true; // center-top
+    if (Math.abs(x) < 1.25+p && Math.abs(z-3.95) < 2.95)                 return true; // center-bottom
+    return false;
+  }
   for (var i = 0; i < 125; i++) {
     var x = -9.45 + Math.random()*18.9, z = -6.45 + Math.random()*12.9;
     if (Math.abs(x) < 0.65 && Math.abs(z-1.55) < 0.65) continue;
+    if (onPath(x, z)) continue;
     var r = Math.random();
     if (r > 0.54) {
-      var tuft = new THREE.Group(); tuft.position.set(x,0.78,z); scene.add(tuft);
+      var tuft = new THREE.Group(); tuft.position.set(x,0.44,z); scene.add(tuft);
       for (var j = 0; j < 4+Math.random()*4; j++) addTo(tuft, new THREE.CylinderGeometry(0.012,0.025,0.32+Math.random()*0.22,5), mat.grass, [0,0.16,0], [Math.random()*0.65,Math.random()*Math.PI,Math.random()*0.65], [1,1,1]);
     } else if (r > 0.3) {
-      var flower = new THREE.Group(); flower.position.set(x,0.79,z); scene.add(flower);
+      var flower = new THREE.Group(); flower.position.set(x,0.44,z); scene.add(flower);
       addTo(flower, new THREE.CylinderGeometry(0.012,0.016,0.26,5), mat.grassDark, [0,0.13,0],[0.12,0,0.05],[1,1,1]);
       addTo(flower, new THREE.SphereGeometry(0.06,8,6), Math.random()>0.5?mat.flowerRed:mat.flowerBlue, [0.02,0.3,0],[0,0,0],[1,0.75,1]);
     } else {
-      addTo(scene, new THREE.DodecahedronGeometry(0.11+Math.random()*0.16,0), mat.stoneDark, [x,0.82,z],[Math.random(),Math.random(),Math.random()],[1.25,0.55,1]);
+      addTo(scene, new THREE.DodecahedronGeometry(0.11+Math.random()*0.16,0), mat.stoneDark, [x,0.55,z],[Math.random(),Math.random(),Math.random()],[1.25,0.55,1]);
     }
   }
 })();
@@ -731,7 +796,7 @@ var currentNPC = null, panelOpen = false;
 
 window.addEventListener("keydown", function(e) {
   var k = e.key.toLowerCase(); keys.add(k);
-  if (k === "e" && currentNPC && !panelOpen) openPanel(currentNPC.id);
+  if (k === "e") { if (panelOpen) closePanel(); else if (currentNPC) openPanel(currentNPC.id); }
   if (k === "escape" && panelOpen) closePanel();
 });
 window.addEventListener("keyup", function(e) { keys.delete(e.key.toLowerCase()); });
@@ -871,24 +936,103 @@ function updateUI(t) {
   // sign text is now painted directly onto the 3D mesh via canvas texture — no HTML overlay needed
 }
 
+/* ── monkey AI ── */
+function updateMonkey(dt, t) {
+  var dx = monkeyTarget.x - monkey.position.x;
+  var dz = monkeyTarget.z - monkey.position.z;
+  var dist = Math.sqrt(dx*dx + dz*dz);
+  var moving = dist > 0.6;
+  if (moving) {
+    var spd = 2.8;
+    monkey.position.x += (dx/dist)*spd*dt;
+    monkey.position.z += (dz/dist)*spd*dt;
+    monkey.userData.heading = Math.atan2(dx,dz)+Math.PI;
+  } else {
+    monkeyTarget.set(
+      THREE.MathUtils.clamp((Math.random()-0.5)*16,-8.2,8.2),
+      0,
+      THREE.MathUtils.clamp((Math.random()-0.5)*11,-5.6,5.6)
+    );
+  }
+  monkeyJumpTimer -= dt;
+  if (monkey.userData.grounded && monkeyJumpTimer <= 0) {
+    monkey.userData.verticalVelocity = 3.8+Math.random()*1.4;
+    monkey.userData.grounded = false;
+    monkeyJumpTimer = 1.6+Math.random()*2.2;
+  }
+  monkey.userData.verticalVelocity -= 12.5*dt;
+  monkey.position.y += monkey.userData.verticalVelocity*dt;
+  if (monkey.position.y <= 0.42) { monkey.position.y=0.42; monkey.userData.verticalVelocity=0; monkey.userData.grounded=true; }
+  monkey.position.x = Math.max(-8.5,Math.min(8.5,monkey.position.x));
+  monkey.position.z = Math.max(-5.8,Math.min(5.8,monkey.position.z));
+  monkey.rotation.y = THREE.MathUtils.lerp(monkey.rotation.y, monkey.userData.heading, 0.1);
+  if (monkey.userData.grounded) monkey.position.y = 0.42+Math.sin(t*9)*(moving?0.015:0.005);
+  var sw = Math.sin(t*8)*(moving?0.5:0.04);
+  monkey.userData.aL.rotation.x = -sw*0.6;
+  monkey.userData.aR.rotation.x =  sw*0.6;
+  var wk = t*8;
+  monkey.userData.fL.position.y = Math.max(0,Math.sin(wk))*0.1;
+  monkey.userData.fR.position.y = Math.max(0,Math.sin(wk+Math.PI))*0.1;
+}
+
+/* ── baby monkey AI ── */
+function updateBabies(dt, t) {
+  for (var i = 0; i < babies.length; i++) {
+    var b = babies[i];
+    var m = b.m;
+    // target = big monkey pos + orbiting offset that shifts over time (playful circling)
+    b.offsetAngle += dt * (1.4 + i * 0.3) * (i % 2 === 0 ? 1 : -1);
+    var lag = t - b.chaseDelay;
+    var tx = monkey.position.x + Math.cos(b.offsetAngle) * b.orbitR;
+    var tz = monkey.position.z + Math.sin(b.offsetAngle) * b.orbitR;
+    var dx = tx - m.position.x;
+    var dz = tz - m.position.z;
+    var dist = Math.sqrt(dx*dx + dz*dz);
+    var moving = dist > 0.25;
+    if (moving) {
+      var spd = 3.4 + i * 0.2; // babies slightly faster — chaotic energy
+      m.position.x += (dx/dist) * spd * dt;
+      m.position.z += (dz/dist) * spd * dt;
+      m.userData.heading = Math.atan2(dx, dz) + Math.PI;
+    }
+    // clamp to island
+    m.position.x = Math.max(-8.2, Math.min(8.2, m.position.x));
+    m.position.z = Math.max(-5.5, Math.min(5.5, m.position.z));
+    // jump — babies jump more often
+    b.jumpTimer -= dt;
+    if (m.userData.grounded && b.jumpTimer <= 0) {
+      m.userData.verticalVelocity = 2.8 + Math.random() * 1.8;
+      m.userData.grounded = false;
+      b.jumpTimer = 0.7 + Math.random() * 1.4;
+    }
+    m.userData.verticalVelocity -= 12.5 * dt;
+    m.position.y += m.userData.verticalVelocity * dt;
+    var groundY = 0.42 * 0.58;
+    if (m.position.y <= groundY) { m.position.y = groundY; m.userData.verticalVelocity = 0; m.userData.grounded = true; }
+    m.rotation.y = THREE.MathUtils.lerp(m.rotation.y, m.userData.heading, 0.14);
+    if (m.userData.grounded) m.position.y = groundY + Math.sin(t*11 + i*2.1) * (moving ? 0.012 : 0.004);
+    var sw = Math.sin(t*10 + i) * (moving ? 0.55 : 0.06);
+    m.userData.aL.rotation.x = -sw * 0.7;
+    m.userData.aR.rotation.x =  sw * 0.7;
+    var wk = t*10 + i;
+    m.userData.fL.position.y = Math.max(0, Math.sin(wk))    * 0.06;
+    m.userData.fR.position.y = Math.max(0, Math.sin(wk+Math.PI)) * 0.06;
+  }
+}
+
 /* ── animate ── */
 function animate() {
   var dt = Math.min(clock.getDelta(), 0.033);
   var t = clock.elapsedTime;
 
   updatePlayer(dt, t);
+  updateMonkey(dt, t);
+  updateBabies(dt, t);
 
   for (var i = 0; i < houses.length; i++) {
     houses[i].position.y = houses[i].userData.baseY + Math.sin(t*0.45 + i*1.7) * 0.006;
     houses[i].rotation.z = Math.sin(t*0.35 + i) * 0.003;
   }
-  for (var i = 0; i < trees.length; i++) {
-    var sw = Math.sin(t*0.95 + i) * 0.035;
-    trees[i].userData.crown.rotation.z = sw;
-    trees[i].userData.sideA.rotation.z = sw * 1.3;
-    trees[i].userData.sideB.rotation.z = sw * 1.1;
-  }
-
   water.material.opacity = 0.36 + Math.sin(t*0.5) * 0.04;
   updateUI(t);
   updateCamera();
